@@ -25,7 +25,7 @@ configure<nebula.plugin.release.git.base.ReleasePluginExtension> {
 }
 
 group = "org.openrewrite.recipe"
-description = "Rewrite recipes."
+description = "Automatic migration from OpenAPI 2 (SpringFox) to OpenAPI 3 (SpringDoc)"
 
 repositories {
     mavenLocal()
@@ -52,7 +52,7 @@ dependencies {
     implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:${rewriteBomVersion}"))
 
     implementation("org.openrewrite:rewrite-java")
-    runtimeOnly("org.openrewrite:rewrite-java-11")
+    runtimeOnly("org.openrewrite:rewrite-java-17")
 
     testImplementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -71,8 +71,8 @@ tasks.named<Test>("test") {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 configure<ContactsExtension> {
@@ -90,10 +90,10 @@ configure<PublishingExtension> {
 }
 
 publishing {
-  repositories {
-      maven {
-          name = "moderne"
-          url = uri("https://us-west1-maven.pkg.dev/moderne-dev/moderne-recipe")
-      }
-  }
+    repositories {
+        maven {
+            name = "moderne"
+            url = uri("https://us-west1-maven.pkg.dev/moderne-dev/moderne-recipe")
+        }
+    }
 }

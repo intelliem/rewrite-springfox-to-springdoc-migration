@@ -15,7 +15,7 @@
  */
 @NonNullApi
 @NonNullFields
-package org.openrewrite.starter;
+package org.openrewrite.java.spring.openapi3;
 
 import org.openrewrite.internal.lang.NonNullApi;
 import org.openrewrite.internal.lang.NonNullFields;
