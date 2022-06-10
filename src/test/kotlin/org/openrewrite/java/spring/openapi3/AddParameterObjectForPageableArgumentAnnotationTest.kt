@@ -84,4 +84,22 @@ class AddParameterObjectForPageableArgumentAnnotationTest : JavaRecipeTest, Rewr
             """,
         dependsOn = arrayOf(pageable, restController, parameterObject, pageableDefault)
     )
+
+    @Test
+    fun shouldNotAddParameterObjectAnnotationToPageableArgument() = assertUnchanged(
+        parser = JavaParser.fromJavaVersion()
+            .logCompilationWarningsAndErrors(true)
+            .classpath("guava")
+            .build(),
+        recipe = AddParameterObjectForPageableArgumentAnnotation(),
+        before = """
+                package org.test.service;
+                
+                public interface MyService { 
+                    
+                    List<?> findAllBy(Pageable pageable) {}
+                }
+            """,
+        dependsOn = arrayOf(pageable, restController, parameterObject, pageableDefault)
+    )
 }
