@@ -6,7 +6,6 @@ import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.search.UsesType;
-import org.openrewrite.java.tree.J;
 import org.openrewrite.java.utils.annotation.LegacyAnnotationDescriptor;
 import org.openrewrite.java.utils.annotation.NewAnnotationDescriptor;
 import org.openrewrite.java.utils.annotation.attribute.AttributePairMigration;
@@ -36,22 +35,6 @@ public class MigrateApiModelAnnotation extends Recipe {
 
     @Override
     protected JavaIsoVisitor<ExecutionContext> getVisitor() {
-        return new JavaIsoVisitor<>() {
-
-            @Override
-            public J.Annotation visitAnnotation(J.Annotation annotation, ExecutionContext executionContext) {
-                J.Annotation a = super.visitAnnotation(annotation, executionContext);
-
-                if (LEGACY_ANNOTATION.matcher().matches(annotation)) {
-
-                    maybeAddImport(NEW_ANNOTATION.fullyQualifiedTypeName());
-                    maybeRemoveImport(LEGACY_ANNOTATION.fullyQualifiedTypeName());
-
-                    return NEW_ANNOTATION.replace(a);
-                }
-
-                return a;
-            }
-        };
+        return new DefaultAnnotationMigrationVisitor(LEGACY_ANNOTATION, NEW_ANNOTATION);
     }
 }
