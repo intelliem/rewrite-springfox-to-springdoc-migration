@@ -5,7 +5,7 @@ import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaIsoVisitor;
-import org.openrewrite.java.search.UsesType;
+import org.openrewrite.java.search.MaybeUsesImport;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.Space;
 import org.openrewrite.java.utils.annotation.NewAnnotationDescriptor;
@@ -28,8 +28,8 @@ public class AddParameterObjectForPageableArgumentAnnotation extends Recipe {
     }
 
     @Override
-    protected @Nullable TreeVisitor<?, ExecutionContext> getApplicableTest() {
-        return new UsesType<>(REST_CONTROLLER_ANNOTATION.matcher().getAnnotationName());
+    protected @Nullable TreeVisitor<?, ExecutionContext> getSingleSourceApplicableTest() {
+        return new MaybeUsesImport<>(REST_CONTROLLER_ANNOTATION.matcher().getAnnotationName());
     }
 
     @Override
