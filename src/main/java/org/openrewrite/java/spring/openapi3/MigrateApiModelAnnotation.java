@@ -11,22 +11,22 @@ import org.openrewrite.java.utils.annotation.LegacyAnnotationDescriptor;
 import org.openrewrite.java.utils.annotation.NewAnnotationDescriptor;
 import org.openrewrite.java.utils.annotation.attribute.AttributePairMigration;
 
-public class MigrateApiAnnotation extends Recipe {
+public class MigrateApiModelAnnotation extends Recipe {
 
     private static final LegacyAnnotationDescriptor LEGACY_ANNOTATION =
-            new LegacyAnnotationDescriptor("io.swagger.annotations", "Api");
+            new LegacyAnnotationDescriptor("io.swagger.annotations", "ApiModel");
     private static final NewAnnotationDescriptor NEW_ANNOTATION =
-            new NewAnnotationDescriptor("io.swagger.v3.oas.annotations.tags", "Tag",
-                    AttributePairMigration.of("tags", "name"));
+            new NewAnnotationDescriptor("io.swagger.v3.oas.annotations.media", "Schema",
+                    AttributePairMigration.of("description", "description"));
 
     @Override
     public String getDisplayName() {
-        return "Change @Api annotation to @Tag annotation";
+        return "Change @ApiModel annotation to @Schema annotation";
     }
 
     @Override
     public String getDescription() {
-        return "Changes @Api annotation to @Tag annotation and applies @Api annotation attributes to @Tag annotation";
+        return "Changes @ApiModel annotation to @Schema annotation and applies @ApiModel annotation attributes to @Schema annotation";
     }
 
     @Override

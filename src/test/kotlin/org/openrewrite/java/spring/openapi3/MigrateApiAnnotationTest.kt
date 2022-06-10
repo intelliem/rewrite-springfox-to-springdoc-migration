@@ -16,16 +16,29 @@ class MigrateApiAnnotationTest : JavaRecipeTest, RewriteTest {
                 String[] tags() default "";
             }
         """.trimIndent()
-
-        private val tag = """
-            package io.swagger.v3.oas.annotations.tags;
-            
-            public @interface Tag {
-                String name();
-                String description() default "";
-            }
-        """.trimIndent()
     }
+
+    @Test
+    fun replaceApiAnnotationToTagAnnotationWhenNoValueIsUsed() = assertChanged(
+        parser = JavaParser.fromJavaVersion()
+            .logCompilationWarningsAndErrors(true)
+            .classpath("guava")
+            .build(),
+        recipe = MigrateApiAnnotation(),
+        before = """
+                import io.swagger.annotations.Api;
+                
+                @Api
+                public class TestApiController {}
+            """,
+        after = """
+                import io.swagger.v3.oas.annotations.tags.Tag;
+                
+                @Tag
+                public class TestApiController {}
+            """,
+        dependsOn = arrayOf(api)
+    )
 
     @Test
     fun replaceApiAnnotationToTagAnnotation() = assertChanged(
@@ -34,7 +47,6 @@ class MigrateApiAnnotationTest : JavaRecipeTest, RewriteTest {
             .classpath("guava")
             .build(),
         recipe = MigrateApiAnnotation(),
-        dependsOn = arrayOf(tag, api),
         before = """
                 import io.swagger.annotations.Api;
                 
@@ -46,6 +58,29 @@ class MigrateApiAnnotationTest : JavaRecipeTest, RewriteTest {
                 
                 @Tag(name = "Test API")
                 public class TestApiController {}
-            """
+            """,
+        dependsOn = arrayOf(api)
+    )
+
+    @Test
+    fun replaceApiAnnotationToTagAnnotationWhenDefaultValueIsUsed() = assertChanged(
+        parser = JavaParser.fromJavaVersion()
+            .logCompilationWarningsAndErrors(true)
+            .classpath("guava")
+            .build(),
+        recipe = MigrateApiAnnotation(),
+        before = """
+                import io.swagger.annotations.Api;
+                
+                @Api("Test API")
+                public class TestApiController {}
+            """,
+        after = """
+                import io.swagger.v3.oas.annotations.tags.Tag;
+                
+                @Tag(name = "Test API")
+                public class TestApiController {}
+            """,
+        dependsOn = arrayOf(api)
     )
 }
