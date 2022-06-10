@@ -17,7 +17,9 @@ public class MigrateApiModelPropertyAnnotation extends Recipe {
     private static final NewAnnotationDescriptor NEW_ANNOTATION =
             new NewAnnotationDescriptor("io.swagger.v3.oas.annotations.media", "Schema",
                     AttributePairMigration.of("value", "description"),
-                    AttributePairMigration.of("required", "required"));
+                    AttributePairMigration.of("required", "required"),
+                    AttributePairMigration.of("example", "example")
+            );
 
     @Override
     public String getDisplayName() {
