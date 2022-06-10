@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class AddParameterObjectForPageableArgumentAnnotation extends Recipe {
 
     private static final NewAnnotationDescriptor REST_CONTROLLER_ANNOTATION = new NewAnnotationDescriptor("org.springframework.web.bind.annotation", "RestController");
+    private static final NewAnnotationDescriptor PAGEABLE_DEFAULT_ANNOTATION = new NewAnnotationDescriptor("org.springframework.data.web", "PageableDefault");
     private static final NewAnnotationDescriptor PARAMETER_OBJECT_ANNOTATION = new NewAnnotationDescriptor("org.springdoc.api.annotations", "ParameterObject");
     private static final String PAGEABLE_FULLY_QUALIFIED_NAME = "org.springframework.data.domain.Pageable";
 
@@ -69,6 +70,8 @@ public class AddParameterObjectForPageableArgumentAnnotation extends Recipe {
             private boolean hasSuitablePageableArgument(J.VariableDeclarations p) {
                 return p.getLeadingAnnotations().stream()
                         .noneMatch(a -> PARAMETER_OBJECT_ANNOTATION.simpleName().equals(a.getSimpleName()))
+                        && p.getLeadingAnnotations().stream()
+                        .anyMatch(a -> PAGEABLE_DEFAULT_ANNOTATION.simpleName().equals(a.getSimpleName()))
                         && Optional.ofNullable(p.getTypeAsFullyQualified())
                         .map(fullyQualified -> fullyQualified.isAssignableTo(PAGEABLE_FULLY_QUALIFIED_NAME))
                         .orElse(false);
